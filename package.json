@@ -1,0 +1,23 @@
+{
+  "name": "objectify-folder",
+  "version": "0.0.0",
+  "description": "turn all non index.js modules in a folder as a single object",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "folder",
+    "modules"
+  ],
+  "author": "mateodelnorte",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mateodelnorte/objectify-folder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mateodelnorte/objectify-folder/issues"
+  },
+  "homepage": "https://github.com/mateodelnorte/objectify-folder"
+}
