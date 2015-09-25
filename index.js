@@ -1,3 +1,4 @@
+var debug = require('debug')('objectify-folder');
 var fs = require('fs');
 var path = require('path');
 
@@ -23,7 +24,14 @@ module.exports = function (options) {
 
   files.forEach(function (file) {
     if (file === 'index.js' || file === '.DS_Store') return;
-    var mod = require(path.resolve(path.join(options.path, file)));
+    var mod;
+    var filepath = path.resolve(path.join(options.path, file));
+    try {
+      mod = require(filepath);
+    } catch (err) {
+      debug('unable to find module at %s', filepath)
+      return;
+    }
     options.fn(mod, result);
   });
 
