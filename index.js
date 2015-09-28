@@ -29,10 +29,10 @@ module.exports = function (options) {
     try {
       mod = require(filepath);
     } catch (err) {
-      debug('unable to find module at %s', filepath)
-      return;
+      if (fs.lstatSync(filepath).isDirectory()) return;
+      throw err;
     }
-    options.fn(mod, result);
+    options.fn(mod, result, file);
   });
 
   return result;
