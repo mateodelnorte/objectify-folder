@@ -1,6 +1,6 @@
 {
   "name": "objectify-folder",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "turn all non index.js modules in a folder as a single object",
   "main": "index.js",
   "scripts": {

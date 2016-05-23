@@ -14,8 +14,9 @@ module.exports = function (options) {
 
   if ( ! options.fn) {
     var index = 0;
-    options.fn = function (mod, result) {
-      result[index++] = mod;
+    options.fn = function (mod, result, file) {
+      var basename = path.basename(file, '.js');
+      result[basename] = mod;
     };
   }
 
