@@ -1,5 +1,6 @@
 var debug = require('debug')('objectify-folder');
 var fs = require('fs');
+var glob = require('glob');
 var path = require('path');
 
 module.exports = function (options) {
@@ -20,13 +21,20 @@ module.exports = function (options) {
     };
   }
 
-  var files = fs.readdirSync(options.path);
+  var globbing = (options.path.indexOf('*') > -1 );
+
+  var files = globbing ? glob.sync(options.path) : fs.readdirSync(options.path);
+
   var result = {};
 
   files.forEach(function (file) {
+
     if (file === 'index.js' || file === '.DS_Store') return;
+    
     var mod;
-    var filepath = path.resolve(path.join(options.path, file));
+
+    var filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
+
     try {
       mod = require(filepath);
     } catch (err) {
