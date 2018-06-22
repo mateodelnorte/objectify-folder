@@ -9,6 +9,5 @@ let f = objectifyFolder(path.resolve(process.cwd(), 'support-mjs'))
 setTimeout(() => {
   assert(f['module'].module === 'module')
   assert(f['default'].default.hello === 'world')
+  console.log('module tests passed')
 }, 100)
-
-console.log('module tests passed')
