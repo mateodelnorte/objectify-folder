@@ -37,7 +37,10 @@ module.exports = function (options) {
     var filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
 
     if (path.extname(filepath) === '.mjs') {
-      throw new Error(`to enable es6 support use require('objectify-folder/modules)`)
+      import(filepath)
+        .then(function(mod) {
+          options.fn(mod, result, file);
+        })
     } else {
       try {
         mod = require(filepath);

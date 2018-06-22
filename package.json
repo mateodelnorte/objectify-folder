@@ -22,10 +22,13 @@
   "homepage": "https://github.com/mateodelnorte/objectify-folder",
   "dependencies": {
     "debug": "^3.1.0",
+    "dynamic-import-support": "^1.0.0",
     "glob": "^7.1.2"
   },
   "devDependencies": {
-    "mocha": "^3.2.0",
+    "assert": "^1.4.1",
+    "mocha": "^5.2.0",
+    "mocha-inline": "0.0.2",
     "should": "^11.1.1"
   }
 }
