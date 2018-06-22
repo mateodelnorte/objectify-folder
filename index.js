@@ -35,13 +35,22 @@ module.exports = function (options) {
 
     var filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
 
-    try {
-      mod = require(filepath);
-    } catch (err) {
-      if (fs.lstatSync(filepath).isDirectory()) return;
-      throw err;
+    if (path.extname(filepath) === '.mjs') {
+        import(filepath)
+          .then(function(mod) {
+            console.log(mod)
+            options.fn(mod, result, file);
+          })
+
+    } else {
+      try {
+        mod = require(filepath);
+      } catch (err) {
+        if (fs.lstatSync(filepath).isDirectory()) return;
+        throw err;
+      }
+      options.fn(mod, result, file);
     }
-    options.fn(mod, result, file);
   });
 
   return result;
