@@ -17,7 +17,6 @@ module.exports = function (options) {
     var index = 0;
     options.fn = function (mod, result, file) {
       var basename = path.basename(file, '.js');
-      var basename = path.basename(file, '.mjs');
       result[basename] = mod;
     };
   }
@@ -36,17 +35,13 @@ module.exports = function (options) {
 
     var filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
 
-    if (path.extname(filepath) === '.mjs') {
-      throw new Error(`to enable es6 support use require('objectify-folder/modules)`)
-    } else {
-      try {
-        mod = require(filepath);
-      } catch (err) {
-        if (fs.lstatSync(filepath).isDirectory()) return;
-        throw err;
-      }
-      options.fn(mod, result, file);
+    try {
+      mod = require(filepath);
+    } catch (err) {
+      if (fs.lstatSync(filepath).isDirectory()) return;
+      throw err;
     }
+    options.fn(mod, result, file);
   });
 
   return result;
