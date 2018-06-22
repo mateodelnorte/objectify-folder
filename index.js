@@ -38,7 +38,6 @@ module.exports = function (options) {
     if (path.extname(filepath) === '.mjs') {
         import(filepath)
           .then(function(mod) {
-            console.log(mod)
             options.fn(mod, result, file);
           })
     } else {
