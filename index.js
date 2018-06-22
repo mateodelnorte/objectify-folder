@@ -41,7 +41,6 @@ module.exports = function (options) {
             console.log(mod)
             options.fn(mod, result, file);
           })
-
     } else {
       try {
         mod = require(filepath);
