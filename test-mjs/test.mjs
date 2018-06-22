@@ -11,4 +11,3 @@ setTimeout(() => {
   assert(f['default'].default.hello === 'world')
   console.log('module tests passed')
 }, 100)
-
