@@ -1,9 +1,9 @@
-var debug = require('debug')('objectify-folder');
-var fs = require('fs');
-var glob = require('glob');
-var path = require('path');
+const debug = require('debug')('objectify-folder');
+const fs = require('fs');
+const glob = require('glob');
+const path = require('path');
 
-module.exports = function (options) {
+module.exports = async (options) => {
 
   if (typeof options === 'string') {
     options = {
@@ -14,44 +14,39 @@ module.exports = function (options) {
   if ( ! options.path) throw new Error('objectify-folder requires a string dir path or an options param with a path property.');
 
   if ( ! options.fn) {
-    var index = 0;
-    options.fn = function (mod, result, file) {
-      var basename = path.basename(file, '.js');
-      var basename = path.basename(file, '.mjs');
+    let index = 0;
+    options.fn = (mod, result, file) => {
+      let basename = path.basename(file, '.mjs');
       result[basename] = mod;
     };
   }
 
-  var globbing = (options.path.indexOf('*') > -1 );
+  let globbing = (options.path.indexOf('*') > -1 );
+  let files = globbing ? glob.sync(options.path) : fs.readdirSync(options.path);
 
-  var files = globbing ? glob.sync(options.path) : fs.readdirSync(options.path);
+  let result = {};
 
-  var result = {};
+  async function importFiles(modulesToImport) {
+    debug('starting import')
 
-  files.forEach(function (file) {
+    const promises = modulesToImport.map((file) => {
+      let filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
+      return new Promise(async (resolve, reject) => {
+        let module
+        try {
+          module = await import(filepath)
+        } catch (e) {
+          if (fs.lstatSync(filepath).isDirectory()) return
+          reject(new Error(`Error importing ${filepath}`))
+        }
+        options.fn(module, result, file)
+        resolve()
+      }) 
+    })
 
-    if (file === 'index.js' || file === '.DS_Store') return;
-    
-    var mod;
+    await Promise.all(promises)
+  }
 
-    var filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
-
-    if (path.extname(filepath) === '.mjs') {
-      import(filepath)
-        .then(function(mod) {
-          options.fn(mod, result, file);
-        })
-    } else {
-      try {
-        mod = require(filepath);
-      } catch (err) {
-        if (fs.lstatSync(filepath).isDirectory()) return;
-        throw err;
-      }
-      options.fn(mod, result, file);
-    }
-  });
-
+  await importFiles(files)
   return result;
-
 };
