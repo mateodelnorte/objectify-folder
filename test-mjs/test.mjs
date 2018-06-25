@@ -11,7 +11,16 @@ const test = async () => {
 
   assert(modules['module'].module === 'module')
   assert(modules['default'].default.hello === 'world')
+
+  try {
+    await objectifyFolder(path.resolve(process.cwd(), 'support-mjs-broken'))
+  } catch (e) {
+    console.log(e)
+    assert(e)
+  }
+
   console.log('module tests passed')
+
 }
 
 test()

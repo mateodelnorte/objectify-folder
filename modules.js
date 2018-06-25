@@ -31,7 +31,7 @@ module.exports = async (options) => {
 
     const promises = modulesToImport.map((file) => {
       let filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
-      return new Promise(async (resolve) => {
+      return new Promise(async (resolve, reject) => {
         let module
         try {
           module = await import(filepath)
