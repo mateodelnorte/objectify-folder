@@ -4,7 +4,7 @@
   "description": "turn all non index.js modules in a folder as a single object",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "keywords": [
     "folder",

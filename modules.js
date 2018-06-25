@@ -32,14 +32,20 @@ module.exports = async (options) => {
     const promises = modulesToImport.map((file) => {
       let filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
       return new Promise(async (resolve, reject) => {
+        if (fs.lstatSync(filepath).isDirectory()) resolve()
+
         let module
+
         try {
           module = await import(filepath)
         } catch (e) {
-          if (fs.lstatSync(filepath).isDirectory()) return
           reject(new Error(`Error importing ${filepath}`))
+        } finally {
+          if (module) {
+            options.fn(module, result, file)
+          }
         }
-        options.fn(module, result, file)
+
         resolve()
       }) 
     })
