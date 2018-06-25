@@ -29,11 +29,28 @@ module.exports = async (options) => {
   async function importFiles(modulesToImport) {
     debug('starting import')
 
-    for (const file of modulesToImport) {
+    const promises = modulesToImport.map((file) => {
       let filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
-      let module = await import(filepath)
-      options.fn(module, result, file)
-    }
+      return new Promise(async (resolve) => {
+        let module
+        try {
+          module = await import(filepath)
+        } catch (e) {
+          if (fs.lstatSync(filepath).isDirectory()) return
+          reject(new Error(`Error importing ${filepath}`))
+        }
+        options.fn(module, result, file)
+        resolve()
+      }) 
+    })
+
+    await Promise.all(promises)
+
+    // for (const file of modulesToImport) {
+    //   let filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
+    //   let module = await import(filepath)
+    //   options.fn(module, result, file)
+    // }
   }
 
   await importFiles(files)
