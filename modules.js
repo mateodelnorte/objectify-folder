@@ -45,12 +45,6 @@ module.exports = async (options) => {
     })
 
     await Promise.all(promises)
-
-    // for (const file of modulesToImport) {
-    //   let filepath = globbing ? path.resolve(file) : path.resolve(path.join(options.path, file));
-    //   let module = await import(filepath)
-    //   options.fn(module, result, file)
-    // }
   }
 
   await importFiles(files)
