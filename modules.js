@@ -39,7 +39,7 @@ module.exports = async (options) => {
         try {
           module = await import(filepath)
         } catch (e) {
-          reject(new Error(`Error importing ${filepath}`))
+          reject(new Error(`Error importing ${filepath}: ${e.message}`))
         } finally {
           if (module) {
             options.fn(module, result, file)
