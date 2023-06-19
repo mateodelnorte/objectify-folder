@@ -24,7 +24,7 @@
   "homepage": "https://github.com/mateodelnorte/objectify-folder",
   "dependencies": {
     "debug": "^4.1.0",
-    "glob": "^7.1.2"
+    "glob": "^10.0.0"
   },
   "devDependencies": {
     "assert": "1.5.0",
